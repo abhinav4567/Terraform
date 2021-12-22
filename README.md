@@ -1,5 +1,5 @@
 # Terraform
-terraform- cloudknowledge-project
+terraform- cloudknowledge-projects
 
 [root@ip-172-31-44-239 project]# cat project.tf
 provider "aws" {
