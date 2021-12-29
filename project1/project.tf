@@ -105,7 +105,7 @@ resource "aws_route_table_association" "private1-asso" {
 
 resource "aws_key_pair" "cloudnative-key" {
   key_name   = "cloudnative-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD41jQk4Br1dK/4yipj+joZbJDwn4OaFIKvqGOkYjXqzTM45OGXCg5BAwNgn+icrTv1vPdj0rdSBjzR+Czl1VbE62mxB3Qq3CZLeG9Er/MhNZu6EF9lEcLspMBx1VYC3G6uZYnzEIzyJr2Xo9gJznjBsL13xK8RVWQZBIh8UpUnJwFxCXxEH2Arz6hzdVDrrYePXJlKSL3e9W1ZBHfIg9m8jFJKlfc+ZHc3CJacMK0XALixSY963wbub+07tf0ZJT7eySN/xofH1vyAiLnFh4HhJdYI6IMrD5a2CSbPq2L2ibTKKkRyxOY85RkrhNVmAlHpqqLxJ8baZBriBwuhLcMv root@ip-172-31-44-239.us-west-2.compute.internal"
+  public_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 resource "aws_instance" "web" {
