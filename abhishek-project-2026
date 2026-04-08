@@ -1,0 +1,86 @@
+resource "aws_instance" "monitoring1" {
+  ami           = "ami-0ec10929233384c7f"
+  instance_type = "t2.micro"
+  vpc_security_group_ids = ["aws_security_group.mon-sg.id"]
+  subnet_id = aws_subnet.mon-subnet1.id
+  key_name = "my-key-pair"
+
+}
+
+resource "aws_vpc" "mon-vpc" {
+    cidr_block = var.aws_cidr
+}
+
+resource "aws_subnet" "mon-subnet1" {
+    vpc_id = aws_vpc.mon-vpc.id
+    cidr_block = "10.0.1.0/24"
+    map_public_ip_on_launch = true
+tags = {
+    Name = "mon-subnet1"
+}
+}
+
+resource "aws_subnet" "mon-subnet2" {
+    vpc_id = aws_vpc.mon-vpc.id
+  cidr_block = "10.0.2.0/24"
+  map_public_ip_on_launch = true
+tags = {
+    Name = "mon-subnet2"
+
+}
+}
+
+resource "aws_internet_gateway" "igw-mon" {
+    vpc_id = aws_vpc.mon-vpc.id  
+}
+
+resource "aws_route_table" "RT" {
+    vpc_id = aws_vpc.mon-vpc.id
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.igw-mon.id
+    }
+  
+}
+
+
+
+resource "aws_route_table_association" "RT" {
+    route_table_id = aws_route_table.RT.id
+    subnet_id = aws_subnet.mon-subnet1.id
+}
+
+resource "aws_route_table_association" "RT2" {
+    route_table_id = aws_route_table.RT.id
+    subnet_id = aws_subnet.mon-subnet2.id
+}
+
+
+resource "aws_security_group" "mon-sg" {
+    name = "mon-sg"
+    description = "Security group for monitoring instance"
+    vpc_id = aws_vpc.mon-vpc.id
+}
+
+resource "aws_vpc_security_group_egress_rule" "egress-rule" {
+  security_group_id = aws_security_group.mon-sg.id
+  cidr_ipv4 = "0.0.0.0/0"
+  from_port = 0
+  to_port = 0
+  ip_protocol = -1
+}
+
+resource "aws_vpc_security_group_ingress_rule" "ingress-rule" {
+    security_group_id = aws_security_group.mon-sg.id
+    ip_protocol = "tcp"
+    from_port = 22
+    to_port = 22
+    cidr_ipv4 = "0.0.0.0/0"
+  
+}
+
+resource "aws_key_pair" "my-key-pair" {
+    key_name = "my-key-pair"
+    public_key = file ("../id_rsa.pub")
+      
+}
